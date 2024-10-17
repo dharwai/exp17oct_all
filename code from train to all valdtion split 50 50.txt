@@ -1,0 +1,38 @@
+import os
+import shutil
+import random
+
+# Define the path to your main Images folder
+base_folder = 'path_to_your_images/Images'  # Update with your Images folder path
+train_folder = os.path.join(base_folder, 'train')
+validation_folder = os.path.join(base_folder, 'validation')
+
+# Define the emotion categories
+categories = ['happy', 'sadness', 'disgust', 'neutral', 'surprise', 'anger', 'fear']
+
+# Loop through each category to perform the split
+for category in categories:
+    # Paths to the specific category folders
+    train_category_folder = os.path.join(train_folder, category)
+    validation_category_folder = os.path.join(validation_folder, category)
+
+    # Ensure the validation category folder exists
+    if not os.path.exists(validation_category_folder):
+        os.makedirs(validation_category_folder)
+
+    # List all images in the train category folder
+    train_images = os.listdir(train_category_folder)
+
+    # Calculate the number of images to move (50% of total)
+    num_images_to_move = len(train_images) // 2
+
+    # Shuffle the images to ensure randomness
+    random.shuffle(train_images)
+
+    # Move the specified number of images from train to validation
+    for img in train_images[:num_images_to_move]:
+        shutil.move(os.path.join(train_category_folder, img), os.path.join(validation_category_folder, img))
+
+    print(f'Moved {num_images_to_move} images from {category} train to {category} validation.')
+
+print("Image splitting completed successfully.")
